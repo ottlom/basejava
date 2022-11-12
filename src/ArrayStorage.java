@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-
+    private int size = 0;
     void clear() {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null) {
@@ -15,13 +15,11 @@ public class ArrayStorage {
                 break;
             }
         }
+        size = 0;
     }
 
     void save(Resume r) {
-        int lastIndex = IntStream.range(0, storage.length)
-                .filter(resume -> storage[resume] == null)
-                .findFirst()
-                .orElse(-1);
+        int lastIndex = size;
         int sameResume = IntStream.range(0, lastIndex)
                 .filter(resume -> r.uuid.equals(storage[resume].uuid))
                 .findFirst()
@@ -32,6 +30,7 @@ public class ArrayStorage {
             if (sameResume == -1) {
                 storage[lastIndex] = r;
                 System.out.println("resume " + r.uuid + " was added");
+                size++;
             } else {
                 System.out.println("List's already have resume with uuid = " + r.uuid);
             }
@@ -59,6 +58,7 @@ public class ArrayStorage {
                     .orElse(-1);
             Resume[] copy = Arrays.copyOfRange(storage, index + 1, storage.length);
             System.arraycopy(copy, 0, storage, index, copy.length);
+            size--;
         } catch (NullPointerException e) {
             System.out.println("such resume with uuid = " + uuid + " not found in list");
         }
@@ -77,10 +77,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int lastIndex = IntStream.range(0, storage.length)
-                .filter(resume -> storage[resume] == null)
-                .findFirst()
-                .orElse(storage.length);
-        return lastIndex;
+        return size;
     }
 }

@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -16,13 +17,9 @@ public class ArrayStorage {
 
     void save(Resume r) {
         if (size > storage.length) {
-            System.out.println("В массиве закончилось место");
+            System.out.println("Array ran out of space");
         } else {
-            int sameResume = IntStream.range(0, size)
-                    .filter(resume -> r.uuid.equals(storage[resume].uuid))
-                    .findFirst()
-                    .orElse(-1);
-            if (sameResume == -1) {
+            if (getIndex(r.uuid) == -1) {
                 storage[size] = r;
                 System.out.println("resume " + r.uuid + " was added");
                 size++;
@@ -33,22 +30,18 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        Resume returnResume = Arrays.stream(storage, 0, size)
-                .filter(resume -> resume.uuid.equals(uuid))
-                .findFirst()
-                .orElse(null);
-        return returnResume;
+        if (getIndex(uuid) != -1) {
+            return storage[getIndex(uuid)];
+        } else {
+            return null;
+        }
     }
 
     void delete(String uuid) {
-        int index = IntStream.range(0, size)
-                .filter(resume -> storage[resume].uuid.equals(uuid))
-                .findFirst()
-                .orElse(-1);
-        if (index == -1) {
+        if (getIndex(uuid) == -1) {
             System.out.println("You try delete element such not found in list");
         } else {
-            System.arraycopy(storage, index + 1, storage, index, size);
+            System.arraycopy(storage, getIndex(uuid) + 1, storage, getIndex(uuid), size);
             size--;
         }
     }
@@ -57,10 +50,18 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
         return size;
+    }
+
+    private int getIndex(String uuid) {
+        int index = IntStream.range(0, size)
+                .filter(resume -> storage[resume].uuid.equals(uuid))
+                .findFirst()
+                .orElse(-1);
+        return index;
     }
 }

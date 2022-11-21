@@ -15,7 +15,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (size > storage.length - 1) {
+        if (size == storage.length) {
             System.out.println("Array ran out of space");
         } else if (getIndex(r.uuid) == -1) {
             storage[size] = r;
@@ -36,7 +36,7 @@ public class ArrayStorage {
         if (index == -1) {
             System.out.println("You try delete element such not found in list");
         } else {
-            System.arraycopy(storage, index + 1, storage, index, storage.length - (index + 1));
+            System.arraycopy(storage, index + 1, storage, index, size - index);
             size--;
         }
     }

@@ -31,7 +31,8 @@ public class ArrayStorage {
         index = getIndex(uuid);
         if (index != -1) {
             return storage[index];
-        }{
+        }
+        {
             return null;
         }
     }

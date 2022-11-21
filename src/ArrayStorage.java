@@ -7,7 +7,6 @@ import java.util.stream.IntStream;
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     private int size;
-    private int index;
 
     void clear() {
         Arrays.stream(storage, 0, size)
@@ -16,7 +15,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (size > storage.length) {
+        if (size > storage.length - 1) {
             System.out.println("Array ran out of space");
         } else if (getIndex(r.uuid) == -1) {
             storage[size] = r;
@@ -28,21 +27,16 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        index = getIndex(uuid);
-        if (index != -1) {
-            return storage[index];
-        }
-        {
-            return null;
-        }
+        int index = getIndex(uuid);
+        return index != -1 ? storage[index] : null;
     }
 
     void delete(String uuid) {
-        index = getIndex(uuid);
+        int index = getIndex(uuid);
         if (index == -1) {
             System.out.println("You try delete element such not found in list");
         } else {
-            System.arraycopy(storage, index + 1, storage, index, size);
+            System.arraycopy(storage, index + 1, storage, index, storage.length - (index + 1));
             size--;
         }
     }

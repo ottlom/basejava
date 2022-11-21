@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -8,6 +7,7 @@ import java.util.stream.IntStream;
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     private int size;
+    private int index;
 
     void clear() {
         Arrays.stream(storage, 0, size)
@@ -18,30 +18,30 @@ public class ArrayStorage {
     void save(Resume r) {
         if (size > storage.length) {
             System.out.println("Array ran out of space");
+        } else if (getIndex(r.uuid) == -1) {
+            storage[size] = r;
+            System.out.println("resume " + r.uuid + " was added");
+            size++;
         } else {
-            if (getIndex(r.uuid) == -1) {
-                storage[size] = r;
-                System.out.println("resume " + r.uuid + " was added");
-                size++;
-            } else {
-                System.out.println("List's already have resume with uuid = " + r.uuid);
-            }
+            System.out.println("List's already have resume with uuid = " + r.uuid);
         }
     }
 
     Resume get(String uuid) {
-        if (getIndex(uuid) != -1) {
-            return storage[getIndex(uuid)];
-        } else {
+        index = getIndex(uuid);
+        if (index != -1) {
+            return storage[index];
+        }{
             return null;
         }
     }
 
     void delete(String uuid) {
-        if (getIndex(uuid) == -1) {
+        index = getIndex(uuid);
+        if (index == -1) {
             System.out.println("You try delete element such not found in list");
         } else {
-            System.arraycopy(storage, getIndex(uuid) + 1, storage, getIndex(uuid), size);
+            System.arraycopy(storage, index + 1, storage, index, size);
             size--;
         }
     }
@@ -58,10 +58,9 @@ public class ArrayStorage {
     }
 
     private int getIndex(String uuid) {
-        int index = IntStream.range(0, size)
+        return IntStream.range(0, size)
                 .filter(resume -> storage[resume].uuid.equals(uuid))
                 .findFirst()
                 .orElse(-1);
-        return index;
     }
 }

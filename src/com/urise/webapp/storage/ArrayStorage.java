@@ -2,30 +2,28 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10000];
     private int size;
 
     public void clear() {
-        Arrays.stream(storage, 0, size)
-                .forEach(resume -> resume = null);
+        Arrays.fill(storage, null);
         size = 0;
     }
 
     public void save(Resume r) {
         if (size == storage.length) {
             System.out.println("Array ran out of space");
-        } else if (getIndex(r.getUuid()) == -1) {
+        } else if (getIndex(r.getUuid()) > -1) {
+            System.out.println("List's already have resume with uuid = " + r.getUuid());
+        } else {
             storage[size] = r;
             System.out.println("resume " + r.getUuid() + " was added");
             size++;
-        } else {
-            System.out.println("List's already have resume with uuid = " + r.getUuid());
         }
     }
 
@@ -39,7 +37,8 @@ public class ArrayStorage {
         if (index == -1) {
             System.out.println("You try delete element such not found in list");
         } else {
-            System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
             size--;
         }
     }
@@ -66,9 +65,12 @@ public class ArrayStorage {
     }
 
     private int getIndex(String uuid) {
-        return IntStream.range(0, size)
-                .filter(resume -> storage[resume].getUuid().equals(uuid))
-                .findFirst()
-                .orElse(-1);
+        int returnIndex = -1;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                returnIndex = i;
+            }
+        }
+        return returnIndex;
     }
 }

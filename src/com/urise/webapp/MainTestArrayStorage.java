@@ -10,12 +10,10 @@ public class MainTestArrayStorage {
 
     public static void main(String[] args) {
 
-        Resume r1 = new Resume();
-        r1.setUuid("c");
-        Resume r2 = new Resume();
-        r2.setUuid("b");
-        Resume r3 = new Resume();
-        r3.setUuid("a");
+        Resume r1 = new Resume("c");
+        Resume r2 = new Resume("b");
+
+        Resume r3 = new Resume("a");
 
         storage.save(r1);
         storage.save(r2);
@@ -36,7 +34,6 @@ public class MainTestArrayStorage {
         System.out.println("Size: " + storage.size());
         storage.save(r1);
         System.out.println("Get r1: " + storage.get(r1.getUuid()));
-        r1.setUuid("uuid1Updated");
         storage.update(r1);
         System.out.println("Get r1: " + storage.get(r1.getUuid()));
     }

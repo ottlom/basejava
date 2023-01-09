@@ -1,18 +1,17 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.AbstractArrayStorage;
-import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.AbstractStorage;
+import com.urise.webapp.storage.ListStorage;
 
 
 public class MainTestArrayStorage {
-    static final AbstractArrayStorage storage = new SortedArrayStorage();
+    static final AbstractStorage storage = new ListStorage();
 
     public static void main(String[] args) {
 
         Resume r1 = new Resume("c");
         Resume r2 = new Resume("b");
-
         Resume r3 = new Resume("a");
 
         storage.save(r1);
@@ -23,7 +22,7 @@ public class MainTestArrayStorage {
         System.out.println("Get r1: " + storage.get(r1.getUuid()));
         System.out.println("Size: " + storage.size());
 
-        System.out.println("Get dummy: " + storage.get("dummy"));
+        //System.out.println("Get dummy: " + storage.get("dummy")); //throw NotExistStorageException
 
         printAll();
         storage.delete(r1.getUuid());
@@ -33,6 +32,7 @@ public class MainTestArrayStorage {
 
         System.out.println("Size: " + storage.size());
         storage.save(r1);
+        System.out.println("Size: " + storage.size());
         System.out.println("Get r1: " + storage.get(r1.getUuid()));
         storage.update(r1);
         System.out.println("Get r1: " + storage.get(r1.getUuid()));

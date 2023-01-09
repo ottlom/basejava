@@ -8,20 +8,30 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
-    private final Resume RESUME_1 = new Resume(UUID_1);
     private static final String UUID_2 = "uuid2";
-    private final Resume RESUME_2 = new Resume(UUID_2);
     private static final String UUID_3 = "uuid3";
-    private final Resume RESUME_3 = new Resume(UUID_3);
     private static final String UUID_4 = "uuid4";
-    private final Resume RESUME_4 = new Resume(UUID_4);
-    private final Resume UUID_NOT_EXIT = new Resume("null");
+    private static final String UUID_NOT_EXIST = "null";
 
-    public AbstractArrayStorageTest(Storage storage) {
+    private static final Resume RESUME_1;
+    private static final Resume RESUME_2;
+    private static final Resume RESUME_3;
+    private static final Resume RESUME_4;
+    private static final Resume UUID_NOT_EXIT;
+
+    static {
+        RESUME_1 = new Resume(UUID_1);
+        RESUME_2 = new Resume(UUID_2);
+        RESUME_3 = new Resume(UUID_3);
+        RESUME_4 = new Resume(UUID_4);
+        UUID_NOT_EXIT = new Resume(UUID_NOT_EXIST);
+    }
+
+    public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -111,7 +121,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() {
-        storage.get("null");
+        storage.get(UUID_NOT_EXIT.getUuid());
     }
 
     private void assertSize(int size) {

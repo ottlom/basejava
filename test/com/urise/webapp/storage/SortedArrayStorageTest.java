@@ -1,8 +1,6 @@
 package com.urise.webapp.storage;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-public class SortedArrayStorageTest extends AbstractArrayStorageTest {
+public class SortedArrayStorageTest extends AbstractStorageTest {
     public SortedArrayStorageTest() {
         super(new SortedArrayStorage());
     }

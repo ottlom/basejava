@@ -1,4 +1,7 @@
-import static org.junit.jupiter.api.Assertions.*;
-class ListStorageTest {
-  
+package com.urise.webapp.storage;
+
+public class ListStorageTest extends AbstractStorageTest {
+    public ListStorageTest() {
+        super(new ListStorage());
+    }
 }

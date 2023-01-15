@@ -9,23 +9,25 @@ public class ListStorage extends AbstractStorage {
     static List<Resume> listStorage = new ArrayList<>();
 
     @Override
-    protected void doSave(Resume r) {
-        listStorage.add(r);
+    protected void doSave(Object searchKey) {
+        listStorage.add((Resume) searchKey);
     }
 
     @Override
-    protected void doDelete(Resume r) {
-        listStorage.remove(r);
+    protected void doDelete(Object searchKey) {
+        listStorage.remove(searchKey);
     }
 
     @Override
-    protected void doUpdate(Resume r) {
-        listStorage.set(getIndex(r.getUuid()), r);
+    protected void doUpdate(Object searchKey) {
+        Resume resume = (Resume) searchKey;
+        listStorage.set(getSearchKey(resume.getUuid()), resume);
     }
 
     @Override
-    protected Resume doGet(Resume r) {
-        return listStorage.get(getIndex(r.getUuid()));
+    protected Resume doGet(Object searchKey) {
+        Resume resume = (Resume) searchKey;
+        return listStorage.get(getSearchKey((resume.getUuid())));
     }
 
     @Override
@@ -43,13 +45,18 @@ public class ListStorage extends AbstractStorage {
         return listStorage.toArray(new Resume[size()]);
     }
 
-
-    protected int getIndex(String uuid) {
-        Resume resume = new Resume(uuid);
-        if (listStorage.contains(resume)) {
-            return listStorage.indexOf(resume);
-        } else {
-            return -1;
+    @Override
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < listStorage.size() + 1; i++) {
+            if (listStorage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
         }
+        return null;
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 }

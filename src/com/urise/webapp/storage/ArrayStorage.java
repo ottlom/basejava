@@ -15,12 +15,33 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getSearchKey(String uuid) {
+        Resume searchKey = new Resume(uuid);
         for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return i;
+            if (searchKey.equals(storage[i])) {
+                return searchKey;
             }
         }
-        return -1;
+        return null;
+    }
+
+    @Override
+    protected void doSave(Object searchKey) {
+
+    }
+
+    @Override
+    protected void doDelete(Object searchKey) {
+
+    }
+
+    @Override
+    protected void doUpdate(Object searchKey) {
+
+    }
+
+    @Override
+    protected Resume doGet(Object searchKey) {
+        return null;
     }
 }

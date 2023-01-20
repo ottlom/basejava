@@ -9,28 +9,28 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-//    @Override
-//    protected void doSave(Object r) {
-//        addResume(r, getIndex(r.getUuid()));
-//        size++;
-//    }
-//
-//    @Override
-//    protected void doDelete(Object r) {
-//        removeResume(getIndex(r.getUuid()));
-//        storage[size - 1] = null;
-//        size--;
-//    }
-//
-//    @Override
-//    protected void doUpdate(Object r) {
-//        storage[getIndex(r.getUuid())] = r;
-//    }
-//
-//    @Override
-//    protected Resume doGet(Object r) {
-//        return storage[getIndex(r.getUuid())];
-//    }
+    @Override
+    protected void doSave(Object searchKey, Resume resume) {
+        addResume(resume, (Integer) getSearchKey(resume.getUuid()));
+        size++;
+    }
+
+    @Override
+    protected void doDelete(Object r) {
+        removeResume((Integer) r);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    @Override
+    protected void doUpdate(Object searchKey, Resume resume) {
+        storage[(Integer) getSearchKey(resume.getUuid())] = resume;
+    }
+
+    @Override
+    protected Resume doGet(Object r) {
+        return storage[(Integer) r];
+    }
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);

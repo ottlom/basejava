@@ -2,14 +2,13 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractStorageTest {
-    private final Storage storage;
+    protected final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -24,11 +23,11 @@ public abstract class AbstractStorageTest {
     private static final Resume UUID_NOT_EXIT;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
-        UUID_NOT_EXIT = new Resume(UUID_NOT_EXIST);
+        RESUME_1 = new Resume();
+        RESUME_2 = new Resume();
+        RESUME_3 = new Resume();
+        RESUME_4 = new Resume();
+        UUID_NOT_EXIT = new Resume();
     }
 
     public AbstractStorageTest(Storage storage) {
@@ -84,19 +83,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
         storage.save(RESUME_1);
-    }
-
-    @Test(expected = StorageException.class)
-    public void saveOverflow() {
-        storage.clear();
-        try {
-            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail();
-        }
-        storage.save(RESUME_4);
     }
 
     @Test(expected = NotExistStorageException.class)

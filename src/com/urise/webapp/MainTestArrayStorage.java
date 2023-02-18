@@ -2,17 +2,17 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.AbstractStorage;
-import com.urise.webapp.storage.ListStorage;
+import com.urise.webapp.storage.SortedArrayStorage;
 
 
 public class MainTestArrayStorage {
-    static final AbstractStorage storage = new ListStorage();
+    static final AbstractStorage storage = new SortedArrayStorage();
 
     public static void main(String[] args) {
 
-        Resume r1 = new Resume("c");
-        Resume r2 = new Resume("b");
-        Resume r3 = new Resume("a");
+        Resume r1 = new Resume("1","Ivanov Ivan");
+        Resume r2 = new Resume("2","Nemkov Vladimir");
+        Resume r3 = new Resume("3","Khabib Nurmagomedov");
 
         storage.save(r1);
         storage.save(r2);
@@ -40,7 +40,7 @@ public class MainTestArrayStorage {
 
     static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : storage.getAll()) {
+        for (Resume r : storage.getAllSorted()) {
             System.out.println(r);
         }
     }

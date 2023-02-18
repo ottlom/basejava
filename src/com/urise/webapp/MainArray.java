@@ -2,14 +2,14 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.AbstractStorage;
-import com.urise.webapp.storage.MapStorage;
+import com.urise.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MainArray {
-    private final static AbstractStorage storage = new MapStorage();
+    private final static AbstractStorage storage = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -17,13 +17,15 @@ public class MainArray {
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | update uuid | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (params.length < 1 || params.length > 2) {
+            if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
                 continue;
             }
             String uuid = null;
-            if (params.length == 2) {
+            String name = null;
+            if (params.length == 3) {
                 uuid = params[1].intern();
+                name = params[2].intern();
             }
             switch (params[0]) {
                 case "list":
@@ -33,12 +35,12 @@ public class MainArray {
                     System.out.println(storage.size());
                     break;
                 case "save":
-                    r = new Resume(uuid);
+                    r = new Resume(uuid,name);
                     storage.save(r);
                     printAll();
                     break;
                 case "update":
-                    r = new Resume(uuid);
+                    r = new Resume(uuid,name);
                     storage.update(r);
                     printAll();
                     break;
@@ -63,14 +65,12 @@ public class MainArray {
     }
 
     static void printAll() {
-        Resume[] all = storage.getAll();
         System.out.println("----------------------------");
-        if (all.length == 0) {
+
+        for (Resume resume : storage.getAllSorted()) {
+            System.out.println(resume);
+        } if (storage.getAllSorted().size() == 0) {
             System.out.println("Empty");
-        } else {
-            for (Resume r : all) {
-                System.out.println(r);
-            }
         }
         System.out.println("----------------------------");
     }

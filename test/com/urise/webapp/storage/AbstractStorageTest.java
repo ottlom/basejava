@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class AbstractStorageTest {
     protected final Storage storage;
 
@@ -23,11 +26,11 @@ public abstract class AbstractStorageTest {
     private static final Resume UUID_NOT_EXIT;
 
     static {
-        RESUME_1 = new Resume();
-        RESUME_2 = new Resume();
-        RESUME_3 = new Resume();
-        RESUME_4 = new Resume();
-        UUID_NOT_EXIT = new Resume();
+        RESUME_1 = new Resume(UUID_1);
+        RESUME_2 = new Resume(UUID_2);
+        RESUME_3 = new Resume(UUID_3);
+        RESUME_4 = new Resume(UUID_4);
+        UUID_NOT_EXIT = new Resume(UUID_NOT_EXIST);
     }
 
     public AbstractStorageTest(Storage storage) {
@@ -51,7 +54,6 @@ public abstract class AbstractStorageTest {
     public void clear() {
         storage.clear();
         assertSize(0);
-        Assert.assertArrayEquals(new Resume[0], storage.getAll());
     }
 
     @Test
@@ -66,10 +68,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] expected = new Resume[]{RESUME_1, RESUME_2, RESUME_3};
-        Assert.assertArrayEquals(expected, storage.getAll());
-        assertSize(expected.length);
+    public void getAllSorted() {
+        List<Resume> list = storage.getAllSorted();
+        Assert.assertEquals(3,storage.size());
+        Assert.assertEquals(list, Arrays.asList(RESUME_1,RESUME_2,RESUME_3));
     }
 
     @Test

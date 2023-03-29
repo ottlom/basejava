@@ -7,6 +7,7 @@ import com.urise.webapp.storage.SortedArrayStorage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class MainArray {
     private final static AbstractStorage storage = new SortedArrayStorage();
@@ -15,7 +16,7 @@ public class MainArray {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
-            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | update uuid | clear | exit): ");
+            System.out.print("Введите одну из команд - (list | save fullName | delete uuid | get uuid | update uuid fullName | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
@@ -65,12 +66,14 @@ public class MainArray {
     }
 
     static void printAll() {
+        List<Resume> all = storage.getAllSorted();
         System.out.println("----------------------------");
-
-        for (Resume resume : storage.getAllSorted()) {
-            System.out.println(resume);
-        } if (storage.getAllSorted().size() == 0) {
+        if (all.size() == 0) {
             System.out.println("Empty");
+        } else {
+            for (Resume r : all) {
+                System.out.println(r);
+            }
         }
         System.out.println("----------------------------");
     }

@@ -4,6 +4,8 @@ import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.AbstractStorage;
 import com.urise.webapp.storage.SortedArrayStorage;
 
+import java.util.List;
+
 
 public class MainTestArrayStorage {
     static final AbstractStorage storage = new SortedArrayStorage();
@@ -40,7 +42,8 @@ public class MainTestArrayStorage {
 
     static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : storage.getAllSorted()) {
+        List<Resume> all = storage.getAllSorted();
+        for (Resume r : all) {
             System.out.println(r);
         }
     }

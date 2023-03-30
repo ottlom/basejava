@@ -70,61 +70,61 @@ public class ResumeTestData {
         listSection = new ListSection(qualification);
         resumePersonal.getSections().put(SectionType.QUALIFICATIONS, listSection);
 
-        ArrayList<CompanySection.Company> arrayCompany = new ArrayList<>();
-        CompanySection.Company.Period period = new CompanySection.Company.Period("09/1997","01/2005",
+        ArrayList<Company> arrayCompany = new ArrayList<>();
+        Company.Period period = new Company.Period("09/1997","01/2005",
                 "тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
                 "Инженер по аппаратному и программному тестированию");
-        CompanySection.Company company = new CompanySection.Company("Alcatel","http://www.alcatel.ru/",period);
+        Company company = new Company("Alcatel","http://www.alcatel.ru/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("01/2005","02/2007",
+        period = new Company.Period("01/2005","02/2007",
                 "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).",
                 "Разработчик ПО");
-        company = new CompanySection.Company("Siemens AG","https://www.siemens.com/ru/ru/home.html/",period);
+        company = new Company("Siemens AG","https://www.siemens.com/ru/ru/home.html/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("03/2007","06/2008",
+        period = new Company.Period("03/2007","06/2008",
                 "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).",
                 "Разработчик ПО");
-        company = new CompanySection.Company("Enkata","http://enkata.com/",period);
+        company = new Company("Enkata","http://enkata.com/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("06/2008","12/2010",
+        period = new Company.Period("06/2008","12/2010",
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2)." +
                         " Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)",
                 "Ведущий специалист");
-        company = new CompanySection.Company("Yota","https://www.yota.ru/",period);
+        company = new Company("Yota","https://www.yota.ru/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("12/2010","04/2012",
+        period = new Company.Period("12/2010","04/2012",
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle)." +
                         " Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга." +
                         " JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.",
                 "Ведущий программист");
-        company = new CompanySection.Company("Luxoft","http://www.luxoft.ru/",period);
+        company = new Company("Luxoft","http://www.luxoft.ru/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("04/2012","10/2014",
+        period = new Company.Period("04/2012","10/2014",
                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway)," +
                         " конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. " +
                         "Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
                         "Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. " +
                         "Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python",
                 "Java архитектор");
-        company = new CompanySection.Company("RIT Center",null ,period);
+        company = new Company("RIT Center",null ,period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("10/2014","01/2016",
+        period = new Company.Period("10/2014","01/2016",
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
                         " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.",
                 "Старший разработчик");
-        company = new CompanySection.Company("Wrike","https://www.wrike.com/",period);
+        company = new Company("Wrike","https://www.wrike.com/",period);
         arrayCompany.add(company);
 
-        period = new CompanySection.Company.Period("10/2013","now",
+        period = new Company.Period("10/2013","now",
                 "Создание, организация и проведение Java онлайн проектов и стажировок.",
                 "Автор проекта.");
-        company = new CompanySection.Company("Java Online Projects","http://javaops.ru/",period);
+        company = new Company("Java Online Projects","http://javaops.ru/",period);
         arrayCompany.add(company);
 
         CompanySection companySection = new CompanySection(arrayCompany);

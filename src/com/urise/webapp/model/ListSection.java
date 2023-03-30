@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ListSection extends AbstractSection {
-    private ArrayList<String> list;
+    private final ArrayList<String> list;
 
     public ArrayList<String> getList() {
         return list;

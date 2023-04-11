@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.StorageException;
+import com.urise.webapp.storage.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected List<Resume> getCopyStorage() {
+    protected List<Resume> doCopyAll() {
         return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 

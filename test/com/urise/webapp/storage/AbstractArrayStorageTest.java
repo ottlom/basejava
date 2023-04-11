@@ -1,6 +1,6 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.StorageException;
+import com.urise.webapp.storage.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +11,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     }
 
     @Test(expected = StorageException.class)
-    public void saveOverflow(){
+    public void saveOverflow() {
         try {
             storage.clear();
             for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {

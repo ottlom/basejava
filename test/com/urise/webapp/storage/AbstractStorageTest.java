@@ -1,7 +1,8 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.ResumeTestData;
+import com.urise.webapp.storage.exception.ExistStorageException;
+import com.urise.webapp.storage.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,25 +14,11 @@ import java.util.List;
 public abstract class AbstractStorageTest {
     protected final Storage storage;
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
-    private static final String UUID_NOT_EXIST = "null";
-
-    private static final Resume RESUME_1;
-    private static final Resume RESUME_2;
-    private static final Resume RESUME_3;
-    private static final Resume RESUME_4;
-    private static final Resume UUID_NOT_EXIT;
-
-    static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
-        UUID_NOT_EXIT = new Resume(UUID_NOT_EXIST);
-    }
+    private static final Resume RESUME_1 = ResumeTestData.createResume("uuid1", "Alex");
+    private static final Resume RESUME_2 = ResumeTestData.createResume("uuid2", "Joe");
+    private static final Resume RESUME_3 = ResumeTestData.createResume("uuid3", "Marlin");
+    private static final Resume RESUME_4 = ResumeTestData.createResume("uuid4", "Elena");
+    private static final Resume UUID_NOT_EXIT = ResumeTestData.createResume("null", "null");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -70,8 +57,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
-        Assert.assertEquals(3,storage.size());
-        Assert.assertEquals(list, Arrays.asList(RESUME_1,RESUME_2,RESUME_3));
+        Assert.assertEquals(3, storage.size());
+        Assert.assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
     }
 
     @Test

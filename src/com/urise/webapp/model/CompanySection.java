@@ -1,30 +1,57 @@
 package com.urise.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CompanySection extends AbstractSection {
-    private final List<Company> companies;
+    private final HashMap<Company, List<Company.Period>> companies;
 
-    public List<Company> getCompanies() {
-        return companies;
-    }
-
-    public CompanySection(ArrayList<Company> companies) {
+    public CompanySection(HashMap<Company, List<Company.Period>> companies) {
         Objects.requireNonNull(companies, "companies must not be null");
         this.companies = companies;
+    }
+
+    public HashMap<Company, List<Company.Period>> getCompanies() {
+        return companies;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < companies.size(); i++) {
-            sb.append("\n" + (i + 1) + " - " + companies.get(i));
-            if (i != companies.size() - 1) {
-                sb.append(", ");
+        for (Map.Entry<Company, List<Company.Period>> entry : companies.entrySet()) {
+            Company company = entry.getKey();
+            sb.append("\n" + company.getName()).append(", ").append(company.getWebsite()).append(":").append("\n");
+            List<Company.Period> periods = entry.getValue();
+            for (int i = 0; i < periods.size(); i++) {
+                sb.append((i + 1) + ".").append(periods.get(i));
+                if (i < periods.size() - 1) {
+                    sb.append("\n");
+                }
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompanySection that = (CompanySection) o;
+        return companies.equals(that.companies);
+    }
+
+    @Override
+    public int hashCode() {
+        return companies.hashCode();
+    }
+
+    public void addCompany(Company company, Company.Period period) {
+        if (getCompanies().containsKey(company)) {
+            List<Company.Period> listPeriods = getCompanies().get(company);
+            listPeriods.add(period);
+        } else {
+            List<Company.Period> listPeriods = new ArrayList<>();
+            listPeriods.add(period);
+            getCompanies().put(company, listPeriods);
+        }
     }
 }

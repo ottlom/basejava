@@ -3,6 +3,7 @@ package com.urise.webapp.model;
 import java.util.*;
 
 public class CompanySection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
     private final HashMap<Company, List<Company.Period>> companies;
 
     public CompanySection(HashMap<Company, List<Company.Period>> companies) {

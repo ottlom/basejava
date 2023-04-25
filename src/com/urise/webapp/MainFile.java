@@ -35,15 +35,14 @@ public class MainFile {
 
     public static void listFiles(File file) {
         if (file.isDirectory()) {
+            System.out.println("Package: " + file.getAbsolutePath());
             for (File dir : file.listFiles()) {
-                if (dir.isDirectory()) {
-                    listFiles(dir);
+                if (dir.isFile()) {
+                    System.out.println("   File: " + dir.getAbsolutePath());
                 } else {
-                    System.out.println(dir.getAbsolutePath());
+                    listFiles(dir);
                 }
             }
-        } else {
-            System.out.println(file.getAbsolutePath());
         }
     }
 }

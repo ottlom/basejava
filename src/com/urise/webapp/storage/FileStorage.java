@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
-    private File directory;
-    private Serializations serializations;
+    private final File directory;
+    private final Serializations serializations;
 
     protected FileStorage(File directory, Serializations serializations) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -27,7 +27,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        if (directory.listFiles() != null) {
+        if (isDirectoryNull()) {
             for (File file : directory.listFiles()) {
                 doDelete(file);
             }
@@ -38,12 +38,9 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
+        if (!isDirectoryNull()) {
             throw new StorageException("read error", null);
-        } else {
-            return list.length;
-        }
+        } else return directory.listFiles().length;
     }
 
     @Override
@@ -69,10 +66,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
-            serializations.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        doUpdate(file,resume);
     }
 
     @Override
@@ -93,14 +90,20 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        File[] files = directory.listFiles();
-        if (files == null) {
+        if (!isDirectoryNull()) {
             throw new StorageException("read error", null);
+        } else {
+            List<Resume> list = new ArrayList<>(directory.listFiles().length);
+            for (File file : directory.listFiles()) {
+                list.add(doGet(file));
+            }
+            return list;
         }
-        List<Resume> list = new ArrayList<>(files.length);
-        for (File file : files) {
-            list.add(doGet(file));
-        }
-        return list;
+    }
+
+    private boolean isDirectoryNull() {
+        if (directory.listFiles() != null) {
+            return true;
+        } else return false;
     }
 }

@@ -33,9 +33,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        int countFiles;
-        countFiles = (int) getStreamListPaths().count();
-        return countFiles;
+        return (int) getStreamListPaths().count();
     }
 
     @Override
@@ -97,10 +95,9 @@ public class PathStorage extends AbstractStorage<Path> {
     public Stream<Path> getStreamListPaths() {
         Stream<Path> stream;
         try {
-            stream = Files.list(directory);
+            return stream = Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("IO error", directory.toString(), e);
         }
-        return stream;
     }
 }

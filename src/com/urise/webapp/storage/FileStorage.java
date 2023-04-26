@@ -28,19 +28,17 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         if (isDirectoryNull()) {
-            for (File file : directory.listFiles()) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
                 doDelete(file);
             }
-        } else {
-            throw new StorageException("directory already empty", null);
         }
     }
 
     @Override
     public int size() {
-        if (!isDirectoryNull()) {
-            throw new StorageException("read error", null);
-        } else return directory.listFiles().length;
+        if (isDirectoryNull()) {
+            return Objects.requireNonNull(directory.listFiles()).length;
+        } else return 0;
     }
 
     @Override
@@ -69,7 +67,7 @@ public class FileStorage extends AbstractStorage<File> {
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
-        doUpdate(file,resume);
+        doUpdate(file, resume);
     }
 
     @Override
@@ -90,20 +88,20 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        if (!isDirectoryNull()) {
-            throw new StorageException("read error", null);
-        } else {
-            List<Resume> list = new ArrayList<>(directory.listFiles().length);
-            for (File file : directory.listFiles()) {
+        if (isDirectoryNull()) {
+            List<Resume> list = new ArrayList<>(Objects.requireNonNull(directory.listFiles()).length);
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
                 list.add(doGet(file));
             }
             return list;
-        }
+        } else return null;
     }
 
     private boolean isDirectoryNull() {
-        if (directory.listFiles() != null) {
+        if (directory.listFiles() == null) {
+            throw new StorageException("read error", null);
+        } else {
             return true;
-        } else return false;
+        }
     }
 }

@@ -93,9 +93,12 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     public Stream<Path> getStreamListPaths() {
-        Stream<Path> stream;
         try {
-            return stream = Files.list(directory);
+            if (Files.list(directory) == null) {
+                throw new StorageException("file is empty", null);
+            } else {
+                return Files.list(directory);
+            }
         } catch (IOException e) {
             throw new StorageException("IO error", directory.toString(), e);
         }

@@ -28,17 +28,20 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         if (isDirectoryNull()) {
+            throw new StorageException("file is empty", null);
+        } else {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 doDelete(file);
             }
         }
+
     }
 
     @Override
     public int size() {
         if (isDirectoryNull()) {
-            return Objects.requireNonNull(directory.listFiles()).length;
-        } else return 0;
+            throw new StorageException("file is empty", null);
+        } else return Objects.requireNonNull(directory.listFiles()).length;
     }
 
     @Override
@@ -89,19 +92,17 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         if (isDirectoryNull()) {
+            throw new StorageException("file doesn't have any resume", null);
+        } else {
             List<Resume> list = new ArrayList<>(Objects.requireNonNull(directory.listFiles()).length);
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 list.add(doGet(file));
             }
             return list;
-        } else return null;
+        }
     }
 
     private boolean isDirectoryNull() {
-        if (directory.listFiles() == null) {
-            throw new StorageException("read error", null);
-        } else {
-            return true;
-        }
+        return directory.listFiles() == null;
     }
 }

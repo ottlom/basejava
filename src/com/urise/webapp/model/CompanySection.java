@@ -4,21 +4,23 @@ import java.util.*;
 
 public class CompanySection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private final HashMap<Company, List<Company.Period>> companies;
+    private HashMap<Company, ArrayList<Company.Period>> companies;
 
-    public CompanySection(HashMap<Company, List<Company.Period>> companies) {
+    public CompanySection() {}
+
+    public CompanySection(HashMap<Company, ArrayList<Company.Period>> companies) {
         Objects.requireNonNull(companies, "companies must not be null");
         this.companies = companies;
     }
 
-    public HashMap<Company, List<Company.Period>> getCompanies() {
+    public HashMap<Company, ArrayList<Company.Period>> getCompanies() {
         return companies;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Company, List<Company.Period>> entry : companies.entrySet()) {
+        for (Map.Entry<Company, ArrayList<Company.Period>> entry : companies.entrySet()) {
             Company company = entry.getKey();
             sb.append("\n" + company.getName()).append(", ").append(company.getWebsite()).append(":").append("\n");
             List<Company.Period> periods = entry.getValue();
@@ -37,12 +39,12 @@ public class CompanySection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompanySection that = (CompanySection) o;
-        return companies.equals(that.companies);
+        return Objects.equals(companies, that.companies);
     }
 
     @Override
     public int hashCode() {
-        return companies.hashCode();
+        return Objects.hash(companies);
     }
 
     public void addCompany(Company company, Company.Period period) {
@@ -50,7 +52,7 @@ public class CompanySection extends AbstractSection {
             List<Company.Period> listPeriods = getCompanies().get(company);
             listPeriods.add(period);
         } else {
-            List<Company.Period> listPeriods = new ArrayList<>();
+            ArrayList<Company.Period> listPeriods = new ArrayList<>();
             listPeriods.add(period);
             getCompanies().put(company, listPeriods);
         }

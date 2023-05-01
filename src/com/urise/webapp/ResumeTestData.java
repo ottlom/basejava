@@ -5,7 +5,6 @@ import com.urise.webapp.model.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -53,7 +52,7 @@ public class ResumeTestData {
                 LocalDate.of(2005, 1, 1),
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
                 "Инженер по аппаратному и программному тестированию");
-        HashMap<Company, List<Company.Period>> companyAndPeriods = new HashMap<>();
+        HashMap<Company, ArrayList<Company.Period>> companyAndPeriods = new HashMap<>();
         CompanySection companySection = new CompanySection(companyAndPeriods);
         resumePersonal.getSections().put(SectionType.EXPERIENCE, companySection);
         companySection.addCompany(company, period);
@@ -102,7 +101,7 @@ public class ResumeTestData {
                 LocalDate.of(2005, 1, 1),
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
                 "Инженер по аппаратному и программному тестированию");
-        HashMap<Company, List<Company.Period>> companyAndPeriods = new HashMap<>();
+        HashMap<Company, ArrayList<Company.Period>> companyAndPeriods = new HashMap<>();
         CompanySection companySection = new CompanySection(companyAndPeriods);
         resume.getSections().put(SectionType.EXPERIENCE, companySection);
         companySection.addCompany(company, period);

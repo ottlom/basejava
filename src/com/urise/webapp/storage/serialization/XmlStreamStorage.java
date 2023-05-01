@@ -7,11 +7,11 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class XmlStreamStorage implements Serializations {
-    private XmlParser xmlParser;
+    private final XmlParser xmlParser;
 
     public XmlStreamStorage() {
         xmlParser = new XmlParser(Resume.class, Company.class, CompanySection.class, TextSection.class,
-                ListSection.class/*сюда возможно надо вставить Company.Period.class*/);
+                ListSection.class,Company.Period.class);
     }
 
     @Override

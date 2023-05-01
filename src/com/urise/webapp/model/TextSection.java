@@ -4,7 +4,9 @@ import java.util.Objects;
 
 public class TextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private final String text;
+    private String text;
+
+    public TextSection(){}
 
     public TextSection(String text) {
         Objects.requireNonNull(text, "Text Section must not be null");
@@ -21,15 +23,15 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public int hashCode() {
-        return text != null ? text.hashCode() : 0;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return text != null ? text.equals(that.text) : that.text == null;
+        return Objects.equals(text, that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(text);
     }
 }

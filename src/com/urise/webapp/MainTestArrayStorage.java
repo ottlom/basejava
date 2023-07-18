@@ -2,19 +2,21 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.AbstractStorage;
-import com.urise.webapp.storage.SortedArrayStorage;
+import com.urise.webapp.storage.PathStorage;
+import com.urise.webapp.storage.serialization.DataStreamSerializer;
 
 import java.util.List;
 
 
 public class MainTestArrayStorage {
-    static final AbstractStorage storage = new SortedArrayStorage();
+    static final AbstractStorage storage = new PathStorage("C:\\Java\\projects\\basejava\\storage", new DataStreamSerializer());
 
     public static void main(String[] args) {
 
         Resume r1 = new Resume("1","Ivanov Ivan");
         Resume r2 = new Resume("2","Nemkov Vladimir");
         Resume r3 = new Resume("3","Khabib Nurmagomedov");
+
 
         storage.save(r1);
         storage.save(r2);

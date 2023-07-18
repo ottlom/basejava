@@ -1,19 +1,26 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private String name;
     private String website;
+    private final List<Period> companyPeriods = new ArrayList<>();
 
-    public Company(){}
+    public Company() {
+    }
 
     public Company(String name, String website) {
         Objects.requireNonNull(name, "Name company must not be null");
@@ -29,6 +36,10 @@ public class Company implements Serializable {
         return website;
     }
 
+    public List<Period> getCompanyPeriods() {
+        return companyPeriods;
+    }
+
     @Override
     public String toString() {
         return "Company(" + name + ',' + website + ')';
@@ -39,27 +50,28 @@ public class Company implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
-        return Objects.equals(name, company.name) && Objects.equals(website, company.website);
+        return Objects.equals(name, company.name) &&
+                Objects.equals(website, company.website) &&
+                Objects.equals(companyPeriods, company.companyPeriods);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, website);
+        return Objects.hash(name, website, companyPeriods);
     }
 
-    //
-    ///
-    ////Nested class Period
+    //Nested class Period
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Period implements Serializable{
-        @XmlJavaTypeAdapter(XmlAdapter.class)
+    public static class Period implements Serializable {
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
-        @XmlJavaTypeAdapter(XmlAdapter.class)
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
         private String description;
         private String title;
 
-        public Period(){}
+        public Period() {
+        }
 
         public Period(LocalDate startDate, LocalDate endDate, String description, String title) {
             Objects.requireNonNull(startDate, "start period must not be null");

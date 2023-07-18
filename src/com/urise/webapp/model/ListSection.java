@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class ListSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private  ArrayList<String> list;
+    private ArrayList<String> list;
 
     public ListSection(){}
 
@@ -22,7 +22,7 @@ public class ListSection extends AbstractSection {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            sb.append("\n" + (i + 1) + " - " + list.get(i));
+            sb.append(list.get(i));
             if (i != list.size() - 1) {
                 sb.append(", ");
             }

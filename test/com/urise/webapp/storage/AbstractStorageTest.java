@@ -12,10 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.urise.webapp.ResumeTestData.createResume;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = new File("C:\\Java\\projects\\basejava\\storage");
-    protected final Storage storage;
+    protected Storage storage;
 
     private static final Resume RESUME_1 = createResume("uuid1", "Alex");
     private static final Resume RESUME_2 = createResume("uuid2", "Joe");
@@ -48,13 +49,14 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        storage.update(RESUME_1);
-        Assert.assertEquals(RESUME_1, storage.get(RESUME_1.getUuid()));
+        Resume newResume = new Resume(RESUME_1.getUuid(), "New Name");
+        storage.update(newResume);
+        assertEquals(newResume, storage.get(RESUME_1.getUuid()));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(UUID_NOT_EXIT);
+        storage.get(UUID_NOT_EXIT.getUuid());
     }
 
     @Test
@@ -66,10 +68,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        int size = storage.size();
         storage.save(RESUME_4);
+        assertSize(4);
         assertGet(RESUME_4);
-        assertSize(++size);
     }
 
     @Test(expected = ExistStorageException.class)
@@ -79,9 +80,8 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() {
-        int size = storage.size();
         storage.delete(RESUME_1.getUuid());
-        assertSize(--size);
+        assertSize(2);
         storage.get(RESUME_1.getUuid());
     }
 

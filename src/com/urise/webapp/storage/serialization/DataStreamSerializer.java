@@ -20,7 +20,7 @@ public class DataStreamSerializer implements Serializations {
     }
 
     @Override
-    public void doWrite(Resume r, OutputStream os) {
+    public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream st = new DataOutputStream(os)) {
             st.writeUTF(r.getUuid());
             st.writeUTF(r.getFullName());
@@ -64,14 +64,12 @@ public class DataStreamSerializer implements Serializations {
                         }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     @Override
-    public Resume doRead(InputStream is) {
-        Resume resume = new Resume();
+    public Resume doRead(InputStream is) throws IOException{
+        Resume resume;
         try (DataInputStream dis = new DataInputStream(is)) {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
@@ -111,10 +109,7 @@ public class DataStreamSerializer implements Serializations {
                 }
             }
             return resume;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return resume;
     }
 }
 

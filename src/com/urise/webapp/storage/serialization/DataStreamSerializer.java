@@ -16,7 +16,7 @@ public class DataStreamSerializer implements Serializations {
     }
 
     private LocalDate readLocalDate(DataInputStream dis) throws IOException {
-        return LocalDate.of(dis.readInt(),dis.readInt(),dis.readInt());
+        return LocalDate.of(dis.readInt(), dis.readInt(), dis.readInt());
     }
 
     @Override
@@ -45,6 +45,7 @@ public class DataStreamSerializer implements Serializations {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection listSection = (ListSection) entry.getValue();
+                        st.writeInt(listSection.getList().size());
                         for (String contentListSection : listSection.getList()) {
                             st.writeUTF(contentListSection);
                         }
@@ -56,8 +57,8 @@ public class DataStreamSerializer implements Serializations {
                             st.writeUTF(company.getName());
                             st.writeUTF(company.getWebsite());
                             for (Company.Period period : company.getCompanyPeriods()) {
-                                writeLocalDate(st,period.getStartPeriod());
-                                writeLocalDate(st,period.getEndPeriod());
+                                writeLocalDate(st, period.getStartPeriod());
+                                writeLocalDate(st, period.getEndPeriod());
                                 st.writeUTF(period.getDescription());
                                 st.writeUTF(period.getTitle());
                             }
@@ -68,7 +69,7 @@ public class DataStreamSerializer implements Serializations {
     }
 
     @Override
-    public Resume doRead(InputStream is) throws IOException{
+    public Resume doRead(InputStream is) throws IOException {
         Resume resume;
         try (DataInputStream dis = new DataInputStream(is)) {
             String uuid = dis.readUTF();
@@ -81,7 +82,7 @@ public class DataStreamSerializer implements Serializations {
 
             size = dis.readInt();
             for (int i = 0; i < size; i++) {
-                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
@@ -89,8 +90,11 @@ public class DataStreamSerializer implements Serializations {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
+                        int sizeContentListSection = dis.readInt();
                         ArrayList<String> listSectionContent = new ArrayList<>();
-                        listSectionContent.add(dis.readUTF());
+                        for (int j = 0; j < sizeContentListSection; j++) {
+                            listSectionContent.add(dis.readUTF());
+                        }
                         resume.addSection(sectionType, new ListSection(listSectionContent));
                         break;
                     case EXPERIENCE:

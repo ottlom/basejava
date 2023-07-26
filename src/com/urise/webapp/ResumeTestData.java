@@ -28,12 +28,13 @@ public class ResumeTestData {
         achievements.add("Организация команды и успешная реализация Java проектов для сторонних заказчиков: " +
                 " приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей спортсменов на Spring Boot," +
                 " участие в проекте МЭШ на Play-2, многомодульный Spring Boot + Vaadin проект для комплексных DIY смет");
-        ListSection listSection = new ListSection(achievements);
-        resume.addSection(SectionType.ACHIEVEMENT, listSection);
+        achievements.add("new list");
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(achievements));
 
         ArrayList<String> qualification = new ArrayList<>();
         qualification.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        resume.addSection(SectionType.QUALIFICATIONS, listSection);
+        qualification.add("new list");
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualification));
 
         Company company = new Company("Alcatel", "http://www.alcatel.ru/");
         Company.Period period = new Company.Period(LocalDate.of(1997, 9, 1),

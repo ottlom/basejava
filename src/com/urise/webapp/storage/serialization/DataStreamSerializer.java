@@ -5,6 +5,7 @@ import com.urise.webapp.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -19,54 +20,62 @@ public class DataStreamSerializer implements Serializations {
         return LocalDate.of(dis.readInt(), dis.readInt(), dis.readInt());
     }
 
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ConsumerCollectionElement<T> collectionElement) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            try {
+                collectionElement.acceptElement(element);
+            } catch (IOException e) {
+                throw new IOException("IO exception while write to DataStream");
+            }
+        }
+    }
+
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream st = new DataOutputStream(os)) {
             st.writeUTF(r.getUuid());
             st.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
-            st.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                st.writeUTF(entry.getKey().name());
-                st.writeUTF(entry.getValue());
-            }
+            writeWithException(contacts.entrySet(), st, (entryContactType) -> {
+                st.writeUTF(entryContactType.getKey().name());
+                st.writeUTF(entryContactType.getValue());
+            });
 
             Map<SectionType, AbstractSection> sections = r.getSections();
-            st.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                st.writeUTF(entry.getKey().name());
-                SectionType typeSection = entry.getKey();
+            writeWithException(sections.entrySet(), st, (entrySection) -> {
+                st.writeUTF(entrySection.getKey().name());
+                SectionType typeSection = entrySection.getKey();
                 switch (typeSection) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        TextSection textSection = (TextSection) entry.getValue();
+                        TextSection textSection = (TextSection) entrySection.getValue();
                         st.writeUTF(textSection.getText());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ListSection listSection = (ListSection) entry.getValue();
-                        st.writeInt(listSection.getList().size());
-                        for (String contentListSection : listSection.getList()) {
-                            st.writeUTF(contentListSection);
-                        }
+                        ListSection listSection = (ListSection) entrySection.getValue();
+                        writeWithException(listSection.getList(), st, st::writeUTF);
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        CompanySection companySection = (CompanySection) entry.getValue();
-                        for (Company company : companySection.getCompanies()) {
-                            st.writeUTF(company.getName());
-                            st.writeUTF(company.getWebsite());
-                            for (Company.Period period : company.getCompanyPeriods()) {
-                                writeLocalDate(st, period.getStartPeriod());
-                                writeLocalDate(st, period.getEndPeriod());
-                                st.writeUTF(period.getDescription());
-                                st.writeUTF(period.getTitle());
-                            }
-                        }
+                        CompanySection companySection = (CompanySection) entrySection.getValue();
+                        writeWithException(companySection.getCompanies(), st, (entryCompanySection) -> {
+                            st.writeUTF(entryCompanySection.getName());
+                            st.writeUTF(entryCompanySection.getWebsite());
+                            writeWithException(entryCompanySection.getCompanyPeriods(), st, (entryPeriods) -> {
+                                writeLocalDate(st, entryPeriods.getStartPeriod());
+                                writeLocalDate(st, entryPeriods.getEndPeriod());
+                                st.writeUTF(entryPeriods.getDescription());
+                                st.writeUTF(entryPeriods.getTitle());
+                            });
+                        });
                 }
-            }
+            });
         }
     }
+
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
@@ -99,15 +108,20 @@ public class DataStreamSerializer implements Serializations {
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
+                        int sizeContentCompanySection = dis.readInt();
                         List<Company> companySectionContent = new ArrayList<>();
-                        Company company = new Company(dis.readUTF(), dis.readUTF());
-
-                        Company.Period period = new Company.Period(readLocalDate(dis),
-                                readLocalDate(dis),
-                                dis.readUTF(),
-                                dis.readUTF());
-                        company.getCompanyPeriods().add(period);
-                        companySectionContent.add(company);
+                        for (int j = 0; j < sizeContentCompanySection; j++) {
+                            Company company = new Company(dis.readUTF(), dis.readUTF());
+                            int sizePeriodsOfCompany = dis.readInt();
+                            for (int k = 0; k < sizePeriodsOfCompany; k++) {
+                                Company.Period period = new Company.Period(readLocalDate(dis),
+                                        readLocalDate(dis),
+                                        dis.readUTF(),
+                                        dis.readUTF());
+                                company.getCompanyPeriods().add(period);
+                            }
+                            companySectionContent.add(company);
+                        }
                         resume.addSection(sectionType, new CompanySection(companySectionContent));
                         break;
                 }

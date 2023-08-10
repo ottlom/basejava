@@ -52,6 +52,11 @@ public class ResumeTestData {
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
                 "Инженер по аппаратному и программному тестированию");
         company.getCompanyPeriods().add(period);
+        period = new Company.Period(LocalDate.of(1997, 9, 1),
+                LocalDate.of(2005, 1, 1),
+                "new",
+                "new");
+        company.getCompanyPeriods().add(period);
         companySection = new CompanySection();
         companySection.getCompanies().add(company);
         resume.addSection(SectionType.EDUCATION,companySection);

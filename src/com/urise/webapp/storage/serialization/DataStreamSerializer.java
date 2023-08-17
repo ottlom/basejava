@@ -61,11 +61,11 @@ public class DataStreamSerializer implements Serializations {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             resume = new Resume(uuid, fullName);
-            readWithException(dis, (entryContacts) -> {
+            readWithException(dis, () -> {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             });
 
-            readWithException(dis, (entrySectionType) -> {
+            readWithException(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
@@ -75,7 +75,7 @@ public class DataStreamSerializer implements Serializations {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ArrayList<String> listSectionContent = new ArrayList<>();
-                        readWithException(dis, (entrySection) -> {
+                        readWithException(dis, () -> {
                             listSectionContent.add(dis.readUTF());
                             resume.addSection(sectionType, new ListSection(listSectionContent));
                         });
@@ -83,9 +83,9 @@ public class DataStreamSerializer implements Serializations {
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Company> companySectionContent = new ArrayList<>();
-                        readWithException(dis, (entrySection) -> {
+                        readWithException(dis, () -> {
                             Company company = new Company(dis.readUTF(), dis.readUTF());
-                            readWithException(dis, (entryPeriods) -> {
+                            readWithException(dis, () -> {
                                 Company.Period period = new Company.Period(readLocalDate(dis),
                                         readLocalDate(dis),
                                         dis.readUTF(),
@@ -112,20 +112,17 @@ public class DataStreamSerializer implements Serializations {
         return LocalDate.of(dis.readInt(), dis.readInt(), dis.readInt());
     }
 
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ConsumerCollectionElement<T> collectionElement) throws IOException {
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, CollectionWriter<T> collectionElement) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
-            try {
-                collectionElement.acceptElement(element);
-            } catch (IOException e) {
-            }
+            collectionElement.acceptElement(element);
         }
     }
 
-    private <T> void readWithException(DataInputStream dis, ConsumerCollectionElement<T> collectionElement) throws IOException {
+    private void readWithException(DataInputStream dis, ElementReader collectionElement) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            collectionElement.acceptElement((T) dis);
+            collectionElement.acceptElement();
         }
     }
 }

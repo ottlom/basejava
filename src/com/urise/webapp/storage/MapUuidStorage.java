@@ -8,6 +8,16 @@ public class MapUuidStorage extends AbstractStorage<String> {
     static Map<String, Resume> mapStorage = new HashMap<>();
 
     @Override
+    public void clear() {
+        mapStorage.clear();
+    }
+
+    @Override
+    public int size() {
+        return mapStorage.size();
+    }
+
+    @Override
     protected String getSearchKey(String uuid) {
         return uuid;
     }
@@ -35,16 +45,6 @@ public class MapUuidStorage extends AbstractStorage<String> {
     @Override
     protected Resume doGet(String uuid) {
         return mapStorage.get(uuid);
-    }
-
-    @Override
-    public void clear() {
-        mapStorage.clear();
-    }
-
-    @Override
-    public int size() {
-        return mapStorage.size();
     }
 
     @Override

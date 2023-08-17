@@ -10,28 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStreamSerializer implements Serializations {
-    private void writeLocalDate(DataOutputStream dos, LocalDate date) throws IOException {
-        dos.writeInt(date.getYear());
-        dos.writeInt(date.getMonthValue());
-        dos.writeInt(date.getDayOfMonth());
-    }
-
-    private LocalDate readLocalDate(DataInputStream dis) throws IOException {
-        return LocalDate.of(dis.readInt(), dis.readInt(), dis.readInt());
-    }
-
-
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ConsumerCollectionElement<T> collectionElement) throws IOException {
-        dos.writeInt(collection.size());
-        for (T element : collection) {
-            try {
-                collectionElement.acceptElement(element);
-            } catch (IOException e) {
-                throw new IOException("IO exception while write to DataStream");
-            }
-        }
-    }
-
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream st = new DataOutputStream(os)) {
@@ -76,7 +54,6 @@ public class DataStreamSerializer implements Serializations {
         }
     }
 
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         Resume resume;
@@ -84,13 +61,11 @@ public class DataStreamSerializer implements Serializations {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readWithException(dis, (entryContacts) -> {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            });
 
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readWithException(dis, (entrySectionType) -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
@@ -99,35 +74,60 @@ public class DataStreamSerializer implements Serializations {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        int sizeContentListSection = dis.readInt();
                         ArrayList<String> listSectionContent = new ArrayList<>();
-                        for (int j = 0; j < sizeContentListSection; j++) {
+                        readWithException(dis, (entrySection) -> {
                             listSectionContent.add(dis.readUTF());
-                        }
-                        resume.addSection(sectionType, new ListSection(listSectionContent));
+                            resume.addSection(sectionType, new ListSection(listSectionContent));
+                        });
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        int sizeContentCompanySection = dis.readInt();
                         List<Company> companySectionContent = new ArrayList<>();
-                        for (int j = 0; j < sizeContentCompanySection; j++) {
+                        readWithException(dis, (entrySection) -> {
                             Company company = new Company(dis.readUTF(), dis.readUTF());
-                            int sizePeriodsOfCompany = dis.readInt();
-                            for (int k = 0; k < sizePeriodsOfCompany; k++) {
+                            readWithException(dis, (entryPeriods) -> {
                                 Company.Period period = new Company.Period(readLocalDate(dis),
                                         readLocalDate(dis),
                                         dis.readUTF(),
                                         dis.readUTF());
                                 company.getCompanyPeriods().add(period);
-                            }
+                            });
                             companySectionContent.add(company);
-                        }
+                        });
                         resume.addSection(sectionType, new CompanySection(companySectionContent));
                         break;
                 }
-            }
+            });
             return resume;
         }
     }
+
+    private void writeLocalDate(DataOutputStream dos, LocalDate date) throws IOException {
+        dos.writeInt(date.getYear());
+        dos.writeInt(date.getMonthValue());
+        dos.writeInt(date.getDayOfMonth());
+    }
+
+    private LocalDate readLocalDate(DataInputStream dis) throws IOException {
+        return LocalDate.of(dis.readInt(), dis.readInt(), dis.readInt());
+    }
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ConsumerCollectionElement<T> collectionElement) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            try {
+                collectionElement.acceptElement(element);
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private <T> void readWithException(DataInputStream dis, ConsumerCollectionElement<T> collectionElement) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            collectionElement.acceptElement((T) dis);
+        }
+    }
 }
+
 

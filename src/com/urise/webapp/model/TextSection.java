@@ -29,6 +29,7 @@ public class TextSection extends AbstractSection {
         TextSection that = (TextSection) o;
         return text.equals(that.text);
     }
+
     @Override
     public int hashCode() {
         return text.hashCode();

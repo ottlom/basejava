@@ -38,6 +38,18 @@ public class PathStorage extends AbstractStorage<Path> {
         return (int) getStreamListPaths().count();
     }
 
+    public Stream<Path> getStreamListPaths() {
+        try {
+            if (Files.list(directory) == null) {
+                throw new StorageException("file is empty", null);
+            } else {
+                return Files.list(directory);
+            }
+        } catch (IOException e) {
+            throw new StorageException("IO error", directory.toString(), e);
+        }
+    }
+
     @Override
     protected Path getSearchKey(String uuid) {
         return directory.resolve(uuid);
@@ -92,17 +104,5 @@ public class PathStorage extends AbstractStorage<Path> {
         List<Resume> list = new ArrayList<>();
         getStreamListPaths().map(this::doGet).forEach(list::add);
         return list;
-    }
-
-    public Stream<Path> getStreamListPaths() {
-        try {
-            if (Files.list(directory) == null) {
-                throw new StorageException("file is empty", null);
-            } else {
-                return Files.list(directory);
-            }
-        } catch (IOException e) {
-            throw new StorageException("IO error", directory.toString(), e);
-        }
     }
 }

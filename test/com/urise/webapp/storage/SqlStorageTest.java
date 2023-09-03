@@ -1,4 +1,9 @@
-import static org.junit.jupiter.api.Assertions.*;
-class SqlStorageTest {
-  
+package com.urise.webapp.storage;
+
+import com.urise.webapp.Config;
+
+public class SqlStorageTest extends AbstractStorageTest {
+    public SqlStorageTest() {
+        super(Config.get().getStorage());
+    }
 }

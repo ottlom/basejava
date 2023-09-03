@@ -41,7 +41,7 @@ public class PathStorage extends AbstractStorage<Path> {
     public Stream<Path> getStreamListPaths() {
         try {
             if (Files.list(directory) == null) {
-                throw new StorageException("file is empty", null);
+                throw new StorageException("file is empty");
             } else {
                 return Files.list(directory);
             }

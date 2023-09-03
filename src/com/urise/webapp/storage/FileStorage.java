@@ -28,7 +28,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         if (isDirectoryNull()) {
-            throw new StorageException("file is empty", null);
+            throw new StorageException("file is empty");
         } else {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 doDelete(file);
@@ -40,7 +40,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public int size() {
         if (isDirectoryNull()) {
-            throw new StorageException("file is empty", null);
+            throw new StorageException("file is empty");
         } else return Objects.requireNonNull(directory.listFiles()).length;
     }
 
@@ -92,7 +92,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         if (isDirectoryNull()) {
-            throw new StorageException("file doesn't have any resume", null);
+            throw new StorageException("file doesn't have any resume");
         } else {
             List<Resume> list = new ArrayList<>(Objects.requireNonNull(directory.listFiles()).length);
             for (File file : Objects.requireNonNull(directory.listFiles())) {

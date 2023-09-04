@@ -2,7 +2,6 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.SqlHelper;
-import com.urise.webapp.storage.exception.ExistStorageException;
 import com.urise.webapp.storage.exception.NotExistStorageException;
 
 import java.sql.DriverManager;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    private SqlHelper helper;
+    private final SqlHelper helper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         helper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
@@ -19,19 +18,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        boolean existsResume = helper.executeSqlQuery("SELECT 1 FROM resume WHERE uuid = ?", (preparedStatement) -> {
-            preparedStatement.setString(1, r.getUuid());
-            return preparedStatement.executeQuery().next();
-        });
-
-        if (existsResume) {
-            throw new ExistStorageException(r.getUuid());
-        }
-
         helper.executeSqlQuery("INSERT INTO resume (uuid, full_name) VALUES (?,?)", (preparedStatement) -> {
             preparedStatement.setString(1, r.getUuid());
             preparedStatement.setString(2, r.getFullName());
-            return preparedStatement.execute();
+            preparedStatement.execute();
+            return null;
         });
     }
 
@@ -42,7 +33,8 @@ public class SqlStorage implements Storage {
             if (preparedStatement.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
-            return preparedStatement.execute();
+            preparedStatement.execute();
+            return null;
         });
     }
 
@@ -51,7 +43,13 @@ public class SqlStorage implements Storage {
         helper.executeSqlQuery("UPDATE resume SET full_name=? WHERE uuid=?", (preparedStatement) -> {
             preparedStatement.setString(1, r.getFullName());
             preparedStatement.setString(2, r.getUuid());
-            return preparedStatement.execute();
+
+            if (preparedStatement.executeUpdate() == 0) {
+                throw new NotExistStorageException(r.getUuid());
+            }
+
+            preparedStatement.execute();
+            return null;
         });
     }
 

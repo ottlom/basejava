@@ -1,5 +1,6 @@
 package com.urise.webapp;
 
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 
 public class ResumeTestData {
@@ -8,13 +9,13 @@ public class ResumeTestData {
 
     public static Resume createResume(String uuid, String name) {
         Resume resume = new Resume(uuid, name);
-//        resume.addContact(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
-//        resume.addContact(ContactType.SKYPE, "grigory.kislin");
-//        resume.addContact(ContactType.MAIL, "gkislin@yandex.ru");
-//        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
-//        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
-//        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
-//        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
+        resume.addContact(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactType.MAIL, "gkislin@yandex.ru");
+        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
+        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
+        resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
 //
 //        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика," +
 //                " креативность, инициативность. Пурист кода и архитектуры."));

@@ -23,11 +23,7 @@ public class SqlHelper {
             PreparedStatement ps = connection.prepareStatement(query);
             return executor.doSqlQuery(ps);
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException(null);
-            } else {
-                throw new StorageException(e);
-            }
+            throw checkSqlException(e);
         }
     }
 
@@ -43,11 +39,15 @@ public class SqlHelper {
                 throw e;
             }
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException(null);
-            } else {
-                throw new StorageException(e);
-            }
+            throw checkSqlException(e);
+        }
+    }
+
+    private RuntimeException checkSqlException(SQLException e) {
+        if (e.getSQLState().equals("23505")) {
+            throw new ExistStorageException(null);
+        } else {
+            throw new StorageException(e);
         }
     }
 }

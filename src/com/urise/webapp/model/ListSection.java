@@ -24,7 +24,7 @@ public class ListSection extends AbstractSection {
         for (int i = 0; i < list.size(); i++) {
             sb.append(list.get(i));
             if (i != list.size() - 1) {
-                sb.append(", ");
+                sb.append("\n");
             }
         }
         return sb.toString();

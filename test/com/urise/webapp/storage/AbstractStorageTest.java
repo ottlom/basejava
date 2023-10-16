@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.exception.ExistStorageException;
 import com.urise.webapp.storage.exception.NotExistStorageException;
@@ -8,9 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.urise.webapp.ResumeTestData.createResume;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,6 +23,7 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3 = createResume(UUID.randomUUID().toString(), "Marlin");
     private static final Resume RESUME_4 = createResume(UUID.randomUUID().toString(), "Elena");
     private static final Resume UUID_NOT_EXIT = createResume("null", "null");
+    private static final Comparator<Resume> RESUME_UUID_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -32,8 +32,11 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
+        RESUME_1.addContact(ContactType.PHONE_NUMBER,"6666666666");
         storage.save(RESUME_1);
+        RESUME_2.addContact(ContactType.PHONE_NUMBER,"8888888888");
         storage.save(RESUME_2);
+        RESUME_3.addContact(ContactType.PHONE_NUMBER,"9999999999");
         storage.save(RESUME_3);
     }
 
@@ -64,7 +67,9 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         Assert.assertEquals(3, storage.size());
-        Assert.assertEquals(list, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
+        List<Resume> sortedResumes = new ArrayList<>(Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
+        sortedResumes.sort(RESUME_UUID_COMPARATOR);
+        Assert.assertEquals(sortedResumes, list);
     }
 
     @Test

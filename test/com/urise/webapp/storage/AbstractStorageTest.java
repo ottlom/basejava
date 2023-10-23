@@ -23,7 +23,7 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_3 = createResume(UUID.randomUUID().toString(), "Marlin");
     private static final Resume RESUME_4 = createResume(UUID.randomUUID().toString(), "Elena");
     private static final Resume UUID_NOT_EXIT = createResume("null", "null");
-    private static final Comparator<Resume> RESUME_UUID_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+    private static final Comparator<Resume> RESUME_UUID_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;

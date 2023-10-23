@@ -81,7 +81,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return helper.executeSqlQuery(
-                        "SELECT * FROM resume r " +
+                "SELECT * FROM resume r " +
                         "LEFT JOIN contact c " +
                         "ON r.uuid = c.resume_uuid " +
                         "LEFT JOIN section s " +
@@ -108,51 +108,35 @@ public class SqlStorage implements Storage {
 
         helper.executeSqlQuery(
                 "SELECT * FROM resume " +
-                "ORDER BY uuid ", ((ps) -> {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String uuidKey = rs.getString("uuid");
-                sortedMap.put(uuidKey, new Resume(uuidKey, rs.getString("full_name")));
-            }
-            return null;
-        }));
+                        "ORDER BY full_name ", ((ps) -> {
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        String uuidKey = rs.getString("uuid");
+                        sortedMap.put(uuidKey, new Resume(uuidKey, rs.getString("full_name")));
+                    }
+                    return null;
+                }));
 
         helper.executeSqlQuery(
                 "SELECT * FROM contact c " +
-                "ORDER BY c.resume_uuid ", (preparedStatement) -> {
+                        "RIGHT JOIN resume r " +
+                        "ON c.resume_uuid = r.uuid ", (preparedStatement) -> {
                     ResultSet res = preparedStatement.executeQuery();
-                    Resume currentResume = null;
                     while (res.next()) {
-                        String resumeUuid = res.getString("resume_uuid");
-                        if (currentResume == null || !currentResume.getUuid().equals(resumeUuid)) {
-                            currentResume = sortedMap.values().stream()
-                                    .filter(r -> r.getUuid().equals(resumeUuid))
-                                    .findFirst()
-                                    .orElse(null);
-                        }
-                        if (currentResume != null) {
-                            addContact(res, currentResume);
-                        }
+                        Resume currentResume = sortedMap.get(res.getString("resume_uuid"));
+                        addContact(res, currentResume);
                     }
-                return null;
+                    return null;
                 });
 
         helper.executeSqlQuery(
                 "SELECT * FROM section s " +
-                "ORDER BY s.resume_uuid ", (preparedStatement) -> {
+                        "RIGHT JOIN resume r " +
+                        "ON s.resume_uuid = r.uuid ", (preparedStatement) -> {
                     ResultSet res = preparedStatement.executeQuery();
-                    Resume currentResume = null;
                     while (res.next()) {
-                        String resumeUuid = res.getString("resume_uuid");
-                        if (currentResume == null || !currentResume.getUuid().equals(resumeUuid)) {
-                            currentResume = sortedMap.values().stream()
-                                    .filter(r -> r.getUuid().equals(resumeUuid))
-                                    .findFirst()
-                                    .orElse(null);
-                        }
-                        if (currentResume != null) {
-                            addSection(res, currentResume);
-                        }
+                        Resume currentResume = sortedMap.get(res.getString("resume_uuid"));
+                        addSection(res, currentResume);
                     }
                     return null;
                 });
@@ -224,12 +208,12 @@ public class SqlStorage implements Storage {
 
         if (sectionType != null && sectionValue != null) {
             switch (sectionType) {
-                case "PERSONAL" :
-                case "OBJECTIVE" :
+                case "PERSONAL":
+                case "OBJECTIVE":
                     r.addSection(SectionType.valueOf(sectionType), new TextSection(rs.getString("sectionvalue")));
                     break;
-                case "ACHIEVEMENT" :
-                case "QUALIFICATIONS" :
+                case "ACHIEVEMENT":
+                case "QUALIFICATIONS":
                     r.addSection(SectionType.valueOf(sectionType), new ListSection(new ArrayList<>(Arrays.asList(sectionValue.split("\n")))));
                     break;
             }

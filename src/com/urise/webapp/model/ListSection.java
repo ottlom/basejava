@@ -8,7 +8,7 @@ public class ListSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     private List<String> list;
 
-    public ListSection(){}
+    public ListSection() {}
 
     public ListSection(ArrayList<String> list) {
         Objects.requireNonNull(list, "list must not be null");
@@ -22,7 +22,7 @@ public class ListSection extends AbstractSection {
     @Override
     public String toString() {
         return String.join("\n", list);
-        }
+    }
 
     @Override
     public boolean equals(Object o) {

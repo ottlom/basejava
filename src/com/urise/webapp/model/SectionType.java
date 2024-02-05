@@ -1,12 +1,32 @@
 package com.urise.webapp.model;
 
 public enum SectionType {
-    PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
-    ACHIEVEMENT("Достижения"),
-    QUALIFICATIONS("Квалификация"),
-    EXPERIENCE("Опыт работы"),
-    EDUCATION("Образование");
+    PERSONAL("Личные качества"),
+    ACHIEVEMENT("Достижения") {
+        @Override
+        protected String toHtml0(String value) {
+            return String.join("\n", value);
+        }
+    },
+    QUALIFICATIONS("Квалификация") {
+        @Override
+        protected String toHtml0(String value) {
+            return String.join("\n", value);
+        }
+    },
+    EXPERIENCE("Опыт работы") {
+        @Override
+        protected String toHtml0(String value) {
+            return "<a href='Опыт работы: " + value + "'>" + value + "</a>";
+        }
+    },
+    EDUCATION("Образование") {
+        @Override
+        protected String toHtml0(String value) {
+            return "<a href='Образование: " + value + "'>" + value + "</a>";
+        }
+    };
 
     private String title;
 
@@ -16,5 +36,13 @@ public enum SectionType {
 
     public String getTitle() {
         return title;
+    }
+
+    protected String toHtml0(String value) {
+        return value;
+    }
+
+    public String toHtml(String value) {
+        return value == null ? "" : toHtml0(value);
     }
 }

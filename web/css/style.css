@@ -12,3 +12,81 @@ footer {
     padding: 5px 20px;
     margin: 20px 0;
 }
+
+dl {
+    background: none repeat scroll 0 0 #FAFAFA;
+    margin: 8px 0;
+    padding: 0;
+}
+
+dt {
+    display: inline-block;
+    width: 170px;
+}
+
+dd {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: top;
+}
+
+h2, h3 {
+    margin: 15px 0 5px;
+}
+
+li {
+    margin: 15px 0;
+}
+
+td {
+    text-align: center;
+}
+.edit {
+    opacity: 1;
+    text-align: right;
+    width: 30px;
+    height: 30px;
+}
+
+.edit:hover {
+    opacity: 0.5;
+    transition: 0.8s;
+}
+
+.delete {
+    opacity: 1;
+    text-align: right;
+    width: 35px;
+    height: 35px;
+}
+
+.delete:hover {
+    opacity: 0.5;
+    transition: 0.8s;
+}
+
+.create {
+    opacity: 1;
+    text-align: right;
+    width: 35px;
+    height: 35px;
+}
+
+.create:hover {
+    opacity: 0.5;
+    transition: 0.8s;
+}
+
+.text-area {
+    width:200px;
+    max-width:200px;
+    min-width: 200px;
+    height: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    display: inline-block;
+}
+
+.input-area {
+    width: 200px;
+}

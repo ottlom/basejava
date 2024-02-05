@@ -2,6 +2,7 @@ package com.urise.webapp;
 
 import com.urise.webapp.model.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ResumeTestData {
@@ -34,31 +35,31 @@ public class ResumeTestData {
         qualification.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualification.add("new list");
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(qualification));
-//
-//        Company company = new Company("Alcatel", "http://www.alcatel.ru/");
-//        Company.Period period = new Company.Period(LocalDate.of(1997, 9, 1),
-//                LocalDate.of(2005, 1, 1),
-//                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
-//                "Инженер по аппаратному и программному тестированию");
-//        company.getCompanyPeriods().add(period);
-//        CompanySection companySection = new CompanySection();
-//        companySection.getCompanies().add(company);
-//        resume.addSection(SectionType.EXPERIENCE,companySection);
-//
-//        company = new Company("Alcatel", "http://www.alcatel.ru/");
-//        period = new Company.Period(LocalDate.of(1997, 9, 1),
-//                LocalDate.of(2005, 1, 1),
-//                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
-//                "Инженер по аппаратному и программному тестированию");
-//        company.getCompanyPeriods().add(period);
-//        period = new Company.Period(LocalDate.of(1997, 9, 1),
-//                LocalDate.of(2005, 1, 1),
-//                "new",
-//                "new");
-//        company.getCompanyPeriods().add(period);
-//        companySection = new CompanySection();
-//        companySection.getCompanies().add(company);
-//        resume.addSection(SectionType.EDUCATION,companySection);
+
+        Company company = new Company("Alcatel", "http://www.alcatel.ru/");
+        Company.Period period = new Company.Period(LocalDate.of(1997, 9, 1),
+                LocalDate.of(2005, 1, 1),
+                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
+                "Инженер по аппаратному и программному тестированию");
+        company.getCompanyPeriods().add(period);
+        CompanySection companySection = new CompanySection();
+        companySection.getCompanies().add(company);
+        resume.addSection(SectionType.EXPERIENCE,companySection);
+
+        company = new Company("Alcatel", "http://www.alcatel.ru/");
+        period = new Company.Period(LocalDate.of(1997, 9, 1),
+                LocalDate.of(2005, 1, 1),
+                "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).",
+                "Инженер по аппаратному и программному тестированию");
+        company.getCompanyPeriods().add(period);
+        period = new Company.Period(LocalDate.of(1997, 9, 1),
+                LocalDate.of(2005, 1, 1),
+                "new",
+                "new");
+        company.getCompanyPeriods().add(period);
+        companySection = new CompanySection();
+        companySection.getCompanies().add(company);
+        resume.addSection(SectionType.EDUCATION,companySection);
         return resume;
     }
 }

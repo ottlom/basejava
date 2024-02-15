@@ -81,8 +81,8 @@ public class ResumeServlet extends HttpServlet {
     private void doSavePortfolioData(HttpServletRequest request, Resume r) {
         for (ContactType contact : ContactType.values()) {
             String value = request.getParameter(contact.name());
-            if (value != null && value.trim().length() != 0) {
-                r.addContact(contact, value);
+            if (!isEmpty(value)) {
+                r.addContact(contact, eraseSpaces(value));
             } else {
                 r.getContacts().put(contact, "");
             }
@@ -91,7 +91,7 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType section : SectionType.values()) {
             String value = request.getParameter(section.toString());
             AbstractSection typeSection = insertDataInSection(section.name(), value);
-            if (value != null && value.trim().length() != 0) {
+            if (isEmpty(value)) {
                 r.addSection(section, typeSection);
             } else {
                 r.getSections().put(section, typeSection);
@@ -99,12 +99,16 @@ public class ResumeServlet extends HttpServlet {
         }
     }
 
+    private boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
+
     private AbstractSection insertDataInSection(String typeSection, String value) {
         AbstractSection section = null;
         switch (typeSection) {
             case "OBJECTIVE":
             case "PERSONAL":
-                section = new TextSection(value);
+                section = new TextSection(eraseSpaces(value));
                 break;
             case "ACHIEVEMENT":
             case "QUALIFICATIONS":
@@ -112,7 +116,7 @@ public class ResumeServlet extends HttpServlet {
                 Arrays.stream(value.split("\n"))
                         .forEach(s -> {
                             if (s != null && s.trim().length() != 0) {
-                                list.add(s);
+                                list.add(eraseSpaces(s));
                             }
                         });
                 section = new ListSection(list);
@@ -122,5 +126,10 @@ public class ResumeServlet extends HttpServlet {
                 break;
         }
         return section;
+    }
+
+    private String eraseSpaces(String value) {
+        value = value.replaceAll("\\s{2,}", " ").trim();
+        return value;
     }
 }
